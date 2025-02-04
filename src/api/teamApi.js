@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:10000/api";
+const API_URL = "https://honkai-star-rail-backend.onrender.com/api";
 
 export const saveTeam = async (uid, teamData) => {
   try {
