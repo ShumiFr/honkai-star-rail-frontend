@@ -8,11 +8,7 @@ const roleClasses = {
   Support: "support",
 };
 
-const SelectedCharacters = ({
-  selectedCharacters,
-  handleCharacterRemove,
-  nickname,
-}) => {
+const SelectedCharacters = ({ selectedCharacters, handleCharacterRemove }) => {
   const roles = ["DPS Principal", "DPS Secondaire", "Soutien", "Support"];
 
   return (
@@ -53,7 +49,7 @@ const SelectedCharacters = ({
             </div>
             {character && (
               <div className="selected-character-name">
-                {character.name === "{NICKNAME}" ? nickname : character.name}
+                {character.name === "{NICKNAME}" ? "Pionnier" : character.name}
               </div>
             )}
           </div>

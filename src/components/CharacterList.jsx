@@ -1,7 +1,5 @@
 /* eslint-disable react/prop-types */
-/* eslint-disable react-hooks/exhaustive-deps */
-
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo, useContext } from "react";
 import { getCharacters } from "../api/characterApi";
 import CharacterCard from "./CharacterCard";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -12,10 +10,10 @@ import {
   faFlask,
   faMedkit,
 } from "@fortawesome/free-solid-svg-icons";
+import { CharacterContext } from "../pages/CharactersPage";
 
-const CharacterList = ({ nickname }) => {
-  const [characters, setCharacters] = useState([]);
-  const [filteredCharacters, setFilteredCharacters] = useState([]);
+const CharacterList = () => {
+  const { characters, setCharacters } = useContext(CharacterContext);
   const [combatTypes, setCombatTypes] = useState([]);
   const [selectedCombatType, setSelectedCombatType] = useState("all");
   const [selectedRole, setSelectedRole] = useState("all");
@@ -27,28 +25,26 @@ const CharacterList = ({ nickname }) => {
         const data = await getCharacters();
         const updatedData = data.map((character) => ({
           ...character,
-          name: character.name === "{NICKNAME}" ? nickname : character.name,
+          name: character.name === "{NICKNAME}" ? "Pionnier" : character.name,
         }));
-        updatedData.sort((a, b) => a.name.localeCompare(b.name)); // Trier par ordre alphabétique
+        updatedData.sort((a, b) => a.name.localeCompare(b.name));
         setCharacters(updatedData);
-        setFilteredCharacters(updatedData);
         const types = Array.from(
           new Set(updatedData.map((char) => JSON.stringify(char.combatType)))
         ).map((type) => JSON.parse(type));
         setCombatTypes(types);
+        console.log("Characters fetched:", updatedData); // Log des personnages
       } catch (error) {
         console.error("Erreur lors de la récupération des personnages:", error);
       }
     };
 
-    fetchCharacters();
-  }, [nickname]);
+    if (characters.length === 0) {
+      fetchCharacters();
+    }
+  }, [setCharacters, characters.length]);
 
-  useEffect(() => {
-    filterCharacters();
-  }, [selectedCombatType, selectedRole, obtainedFilter, characters]);
-
-  const filterCharacters = () => {
+  const filteredCharacters = useMemo(() => {
     let filtered = characters;
     if (selectedCombatType !== "all") {
       filtered = characters.filter(
@@ -63,8 +59,9 @@ const CharacterList = ({ nickname }) => {
       filtered = filtered.filter((char) => char.obtained === isObtained);
     }
     filtered.sort((a, b) => a.name.localeCompare(b.name));
-    setFilteredCharacters(filtered);
-  };
+    console.log("Filtered characters:", filtered); // Log des personnages filtrés
+    return filtered;
+  }, [selectedCombatType, selectedRole, obtainedFilter, characters]);
 
   return (
     <div>
@@ -159,11 +156,7 @@ const CharacterList = ({ nickname }) => {
       </div>
       <div className="characters-grid">
         {filteredCharacters.map((character) => (
-          <CharacterCard
-            key={character.id}
-            character={character}
-            nickname={nickname}
-          />
+          <CharacterCard key={character.id} character={character} />
         ))}
       </div>
     </div>

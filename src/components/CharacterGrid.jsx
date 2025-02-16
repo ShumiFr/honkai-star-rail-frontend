@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import notFoundImage from "../assets/not-found.png"; // Importer l'image not-found
 
-const CharacterGrid = ({ characters, onCharacterSelect, nickname }) => {
+const CharacterGrid = ({ characters, onCharacterSelect }) => {
   return (
     <div className="character-grid">
       {characters.map((character) => (
@@ -30,7 +30,7 @@ const CharacterGrid = ({ characters, onCharacterSelect, nickname }) => {
           </div>
           <div className="team-builder-character-name">
             <h3>
-              {character.name === "{NICKNAME}" ? nickname : character.name}
+              {character.name === "{NICKNAME}" ? "Pionnier" : character.name}
             </h3>
           </div>
         </div>

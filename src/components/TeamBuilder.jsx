@@ -6,7 +6,7 @@ import CharacterGrid from "./CharacterGrid";
 import SelectedCharacters from "./SelectedCharacters";
 import notFoundImage from "../assets/not-found.png"; // Assurez-vous que ce chemin est correct
 
-const TeamBuilder = ({ uid, nickname }) => {
+const TeamBuilder = ({ uid }) => {
   const [characters, setCharacters] = useState([]);
   const [selectedCharacters, setSelectedCharacters] = useState([]);
   const [teamName, setTeamName] = useState("");
@@ -17,7 +17,7 @@ const TeamBuilder = ({ uid, nickname }) => {
         const data = await getCharacters();
         const updatedData = data.map((character) => ({
           ...character,
-          name: character.name === "{NICKNAME}" ? nickname : character.name,
+          name: character.name === "{NICKNAME}" ? "Pionnier" : character.name,
           icon: character.icon || notFoundImage, // Remplacer les images manquantes
         }));
         updatedData.sort((a, b) => a.name.localeCompare(b.name)); // Trier par ordre alphabétique
@@ -28,7 +28,7 @@ const TeamBuilder = ({ uid, nickname }) => {
     };
 
     fetchCharacters();
-  }, [nickname]);
+  }, []);
 
   const handleCharacterSelect = (character) => {
     if (
@@ -102,7 +102,6 @@ const TeamBuilder = ({ uid, nickname }) => {
       <SelectedCharacters
         selectedCharacters={selectedCharacters}
         handleCharacterRemove={handleCharacterRemove}
-        nickname={nickname} // Passer le surnom ici
       />
       <button
         className="save-team-button"
@@ -117,7 +116,6 @@ const TeamBuilder = ({ uid, nickname }) => {
           <CharacterGrid
             characters={charactersByRole[role]}
             onCharacterSelect={handleCharacterSelect}
-            nickname={nickname} // Passer le surnom ici
           />
         </div>
       ))}

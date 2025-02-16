@@ -8,7 +8,7 @@ import {
   faFlask,
   faMedkit,
 } from "@fortawesome/free-solid-svg-icons";
-import notFoundImage from "../assets/not-found.png"; // Assurez-vous que ce chemin est correct
+import notFoundImage from "../assets/not-found.png";
 
 const roleIcons = {
   "DPS Principal": faHandFist,
@@ -24,13 +24,13 @@ const roleColors = {
   Support: "green",
 };
 
-const CharacterCard = ({ character, nickname }) => {
+const CharacterCard = ({ character }) => {
   const [imageSrc, setImageSrc] = useState(
     character.shopItemIcon || notFoundImage
   );
   const cardClass = character.stars === 5 ? "five-stars" : "four-stars";
   const displayName =
-    character.name === "{NICKNAME}" ? nickname : character.name;
+    character.name === "{NICKNAME}" ? "Pionnier" : character.name;
   const navigate = useNavigate();
 
   const handleImageError = () => {
@@ -40,6 +40,8 @@ const CharacterCard = ({ character, nickname }) => {
   const handleClick = () => {
     navigate(`/character/${character.id}`);
   };
+
+  console.log("Character data:", character); // Log des données du personnage
 
   return (
     <div className={`character-card ${cardClass}`} onClick={handleClick}>
@@ -52,7 +54,12 @@ const CharacterCard = ({ character, nickname }) => {
           color={roleColors[character.role]}
         />
       </div>
-      <img src={imageSrc} alt={character.name} onError={handleImageError} />
+      <img
+        src={imageSrc}
+        alt={character.name}
+        onError={handleImageError}
+        loading="lazy"
+      />
       <h3>{displayName}</h3>
     </div>
   );
